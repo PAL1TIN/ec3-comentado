@@ -1,0 +1,41 @@
+
+
+### Interface
+
+1. **Interação do Usuário**: A interface (como menus e opções no terminal) 
+é a maneira pela qual os usuários (alunos e professores) interagem com o sistema.
+ Ela permite que eles realizem ações, como listar itens, retirar livros, devolver itens, etc.
+
+2. **Entrada de Dados**: A interface coleta dados do usuário, como títulos de livros e nomes, 
+que são essenciais para o funcionamento das operações de empréstimo e devolução.
+
+3. **Exibição de Resultados**: A interface também apresenta informações, como a lista de 
+itens disponíveis e status de empréstimos, permitindo que os usuários tenham feedback sobre suas ações.
+
+
+### Banco de Dados
+
+1. **Armazenamento de Dados**: O banco de dados (que poderia ser uma estrutura de dados em memória 
+ou um sistema de gerenciamento de banco de dados real) armazena informações sobre itens, usuários, 
+e empréstimos. Isso garante que os dados sejam persistentes e possam ser acessados a qualquer momento.
+
+2. **Gerenciamento de Estado**: O banco de dados mantém o estado atual da biblioteca, como quais 
+itens estão disponíveis, quem os retirou e quais estão atrasados. Isso é crucial para o controle das operações.
+
+3. **Acesso Rápido**: O banco de dados permite um acesso eficiente e organizado às informações, 
+facilitando as operações que a interface solicita.
+
+### Relação Entre Eles
+
+- **Fluxo de Dados**: Quando um usuário realiza uma ação na interface (como retirar um livro), 
+essa ação é processada pela lógica do programa, que interage com o banco de dados para atualizar o estado 
+(por exemplo, registrar o empréstimo).
+
+- **Feedback ao Usuário**: Após a interação com o banco de dados, a interface é atualizada com as 
+informações mais recentes, informando o usuário sobre o sucesso ou falha da operação.
+
+### Conclusão
+
+A interface e o banco de dados trabalham em conjunto para proporcionar uma experiência de usuário 
+fluida e eficiente. A interface facilita a interação e coleta de dados, enquanto o banco de dados 
+armazena e gerencia esses dados, permitindo que o sistema funcione corretamente.
