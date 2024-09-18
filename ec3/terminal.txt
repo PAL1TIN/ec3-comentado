@@ -1,0 +1,353 @@
+package tarefa; // Pacote da classe Terminal
+
+import java.util.Date; // Importa a classe Date para manipulação de datas
+import java.util.Scanner; // Importa a classe Scanner para entrada de dados
+
+// Classe Terminal que gerencia a interface de interação do usuário
+public class Terminal {
+    private Controle controle; // Objeto de controle para gerenciar livros e usuários
+
+    // Construtor da classe Terminal que inicializa o controle
+    public Terminal() {
+        controle = new Controle(); // Cria uma nova instância de Controle
+    }
+
+    // Método para exibir o menu principal
+    public void menu() {
+        Scanner sc = new Scanner(System.in); // Scanner para entrada do usuário
+        int op = 1; // Inicializa a opção do menu
+
+        // Loop do menu principal
+        while (op != 0) {
+            System.out.print("Escolha um modo:\n1. Administrador\n2. Atendimento\n0. Sair\n ");
+            op = sc.nextInt(); // Lê a opção escolhida
+
+            switch (op) {
+                case 1:
+                    this.modoAdministrador(sc); // Chama o modo administrador
+                    break;
+                case 2:
+                    this.modoAtendimento(); // Chama o modo de atendimento
+                    break;
+                case 0:
+                    sc.close(); // Fecha o Scanner ao sair
+                    return; // Sai do método
+                default:
+                    System.out.println("Opção inválida"); // Mensagem de opção inválida
+            }
+        }
+    }
+
+    // Método para mostrar todos os itens disponíveis
+    private void mostraItens() {
+        System.out.println("Livros: ");
+        for (Livro l : this.controle.getLivros()) {
+            System.out.println(l.toString()); // Imprime a representação do livro
+        }
+        System.out.println("Mapas Temáticos:");
+        for (MapaTematico p : this.controle.getMapas()) {
+            System.out.println(p.toString()); // Imprime a representação do mapa
+        }
+    }
+
+    // Método para gerenciar o atendimento
+    private void modoAtendimento() {
+        int n = 0;
+        do {
+            System.out.println("Entre como:");
+            System.out.println("1. Usuario");
+            System.out.println("2. Aluno");
+            System.out.println("3. Professor");
+
+            int op = new Scanner(System.in).nextInt(); // Lê a opção de entrada
+            switch (op) {
+                case 1:
+                    n = 1; // Define n para sair do loop
+                    this.modoAtendimentoUsuario(new Scanner(System.in)); // Chama atendimento para usuário
+                    break;
+                case 2:
+                    n = 1; // Define n para sair do loop
+                    this.modoAtendimentoAluno(new Scanner(System.in)); // Chama atendimento para aluno
+                    break;
+                case 3:
+                    n = 1; // Define n para sair do loop
+                    this.modoAtendimentoProfessor(new Scanner(System.in)); // Chama atendimento para professor
+                    break;
+                default:
+                    System.out.println("Digite uma opção valida"); // Mensagem de opção inválida
+                    break;
+            }
+        } while (n == 0); // Continua até uma opção válida ser escolhida
+    }
+
+    // Método para o modo administrador
+    private void modoAdministrador(Scanner scanner) {
+        while (true) {
+            System.out.println("Administrador:");
+            System.out.println("1. Adicionar um Livro");
+            System.out.println("2. Adicionar um Mapa");
+            System.out.println("3. Listar todos Itens");
+            System.out.println("0. Voltar");
+            int opcao = scanner.nextInt(); // Lê a opção do administrador
+            scanner.nextLine(); // Consome a nova linha
+
+            switch (opcao) {
+                case 0:
+                    return; // Sai do modo administrador
+                case 1:
+                    System.out.print("Digite o título do livro: ");
+                    String tituloLivro = scanner.nextLine(); // Lê o título do livro
+                    this.controle.adicionarLivro(new Livro(tituloLivro)); // Adiciona o livro
+                    break;
+                case 2:
+                    System.out.print("Digite o título do mapa: ");
+                    String tituloMapa = scanner.nextLine(); // Lê o título do mapa
+                    System.out.print("Digite o nível de privilégio do mapa (1: Usuario; 2: Aluno; 3: Professor): ");
+                    int privMapa = new Scanner(System.in).nextInt(); // Lê o nível de privilégio
+                    this.controle.adicionarMapaTematico(new MapaTematico(tituloMapa, privMapa)); // Adiciona o mapa
+                    break;
+                case 3:
+                    this.mostraItens(); // Mostra todos os itens
+                    break;
+                default:
+                    System.out.println("Opção inválida."); // Mensagem de opção inválida
+            }
+        }
+    }
+
+
+    // Método para atendimento a usuários
+    private void modoAtendimentoUsuario(Scanner scanner) {
+        while (true) {
+            System.out.println("Atendimento:");
+            System.out.println("1. Listar todos Itens");
+            System.out.println("2. Retirar um Livro");
+            System.out.println("3. Retirar um Mapa");
+            System.out.println("4. Devolver um livro");
+            System.out.println("5. Devolver um mapa");
+            System.out.println("0. Voltar");
+
+            int opcao = scanner.nextInt(); // Lê a opção do usuário
+            scanner.nextLine(); // Consome a nova linha
+
+            switch (opcao) {
+                case 0:
+                    return; // Sai do atendimento
+
+                case 1:
+                    this.mostraItens(); // Mostra todos os itens
+                    break;
+
+                case 2:
+                    System.out.print("Digite o título do livro: ");
+                    String titulo = scanner.nextLine(); // Lê o título do livro
+                    
+		    System.out.print("Qual seu nome: ");
+                    String nomeUsuario = scanner.nextLine(); // Lê o nome do usuário
+                    this.controle.adicionarUsuarioExt(new Usuario(nomeUsuario)); // Adiciona o usuário
+                    this.controle.emprestarLivro(titulo, this.controle.getUsuario(nomeUsuario)); // Empresta o livro
+                    break;
+
+                case 3:
+                    System.out.print("Digite o título do mapa: ");
+                    String tMapa = scanner.nextLine(); // Lê o título do mapa
+                    System.out.print("Qual seu nome: ");
+                    String nomeUser = scanner.nextLine(); // Lê o nome do usuário
+                    this.controle.adicionarUsuarioExt(new Usuario(nomeUser)); // Adiciona o usuário
+                    this.controle.emprestarMapa(tMapa, this.controle.getUsuario(nomeUser)); // Empresta o mapa
+                    break;
+
+                case 4:
+                    System.out.print("Digite o título do livro: ");
+                    String title = scanner.nextLine(); // Lê o título do livro
+                    System.out.print("Qual seu nome: ");
+                    String nomeUsr = scanner.nextLine(); // Lê o nome do usuário
+
+			 // Verifica se o usuário é o dono
+                    if (nomeUsr.equals(this.controle.getLivro(title).getDono().getNome())) {
+                        this.controle.devolverLivro(title, this.controle.getUsuario(nomeUsr)); // Devolve o livro
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Digite o título do livro: ");
+                    String nome = scanner.nextLine(); // Lê o título do mapa
+                    System.out.print("Qual seu nome: ");
+                    String nomeU = scanner.nextLine(); // Lê o nome do usuário
+
+			// Verifica se o usuário é o dono
+                    if (nomeU.equals(this.controle.getMapaTematico(nome).getDono().getNome())) { 
+                        this.controle.devolverMapaTematico(nome, this.controle.getUsuario(nomeU)); // Devolve o mapa
+                    }
+                    break;
+
+                default:
+                    System.out.println("Opção inválida."); // Mensagem de opção inválida
+            }
+        }
+    }
+
+
+private void modoAtendimentoProfessor(Scanner scanner) {
+    	// Loop infinito para o atendimento ao professor
+    	while (true) {
+
+        // Exibe o menu de opções para o professor
+        System.out.println("Atendimento:");
+        System.out.println("1. Listar todos Itens");
+        System.out.println("2. Retirar um Livro");
+        System.out.println("3. Retirar um Mapa");
+        System.out.println("4. Retirar um Periódico");
+        System.out.println("5. Bloquear um Livro");
+        System.out.println("6. Desbloquear um Livro");
+        System.out.println("7. Devolver um Livro");
+        System.out.println("8. Devolver um Mapa");
+        System.out.println("0. Voltar");
+        
+        // Lê a opção escolhida pelo professor
+        int opcao = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer do scanner
+
+        // Processa a opção escolhida
+        switch (opcao) {
+            case 0:
+                return; // Sai do método, voltando ao menu anterior
+
+            case 1:
+                this.mostraItens(); // Chama o método para mostrar todos os itens disponíveis
+                break;
+
+            case 2:
+                // Solicita o título do livro que o professor deseja retirar
+                System.out.print("Digite o título do item: ");
+                String titulo = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUsuario = scanner.nextLine();
+                
+                // Adiciona o professor ao controle e realiza o empréstimo do livro
+                this.controle.adicionarProfessor(new Professor(nomeUsuario));
+                this.controle.emprestarLivro(titulo, this.controle.getUsuario(nomeUsuario));
+                break;
+
+            case 3:
+                // Solicita o título do mapa que o professor deseja retirar
+                System.out.print("Digite o título do mapa: ");
+                String tMapa = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUser = scanner.nextLine();
+                
+                // Adiciona o professor ao controle e realiza o empréstimo do mapa
+                this.controle.adicionarProfessor(new Professor(nomeUser));
+                this.controle.emprestarMapa(tMapa, this.controle.getUsuario(nomeUser));
+                break;
+
+            case 4:
+                // Solicita o título do periódico que o professor deseja retirar
+                System.out.print("Digite o título do periódico: ");
+                String tPer = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUsr = scanner.nextLine();
+                
+                // Adiciona o professor ao controle e realiza o empréstimo do periódico
+                this.controle.adicionarProfessor(new Professor(nomeUsr));
+                this.controle.emprestarPer(tPer, this.controle.getProfessor(nomeUsr));
+                break;
+
+            case 5:
+                // Solicita o título do livro que o professor deseja bloquear
+                System.out.print("Qual o título do livro a ser bloqueado: ");
+                String tLiv = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeU = scanner.nextLine();
+
+                // Solicita o prazo para o desbloqueio do livro
+                System.out.println("Qual o prazo para o desbloqueio do livro: ");
+                int prazo = new Scanner(System.in).nextInt();
+                
+                // Adiciona o professor ao controle e bloqueia o livro
+                this.controle.adicionarProfessor(new Professor(nomeU));
+                this.controle.bloqueiaLivro(this.controle.getProfessor(nomeU), tLiv, prazo);
+                break;
+
+            case 6:
+                // Solicita o título do livro que o professor deseja desbloquear
+                System.out.print("Qual o título do livro a ser desbloqueado: ");
+                String tLv = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nameU = scanner.nextLine();
+                
+                // Verifica se o professor existe e se o nome é válido para desbloquear o livro
+                if (this.controle.getProfessor(nameU) != null) {
+                    if (nameU.equals(this.controle.getLivro(tLv).getBloqueador().getNome())) {
+                        this.controle.desbloqueiaLivro(this.controle.getProfessor(nameU), tLv);
+                    } else {
+                        System.out.println("Nome inválido");
+                    }
+                } else {
+                    System.out.println("Professor não encontrado");
+                }
+                break;
+
+            case 7:
+                // Solicita o título do livro que o professor deseja devolver
+                System.out.print("Digite o título do livro: ");
+                String title = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUsur = scanner.nextLine();
+                
+                // Verifica se o professor é o dono do livro antes de permitir a devolução
+                if (nomeUsur.equals(this.controle.getLivro(title).getDono().getNome())) {
+                    this.controle.devolverLivro(title, this.controle.getUsuario(nomeUsur));
+                }
+                break;
+
+            case 8:
+                // Solicita o título do mapa que o professor deseja devolver
+                System.out.print("Digite o título do livro: ");
+                String nome = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUs = scanner.nextLine();
+                
+                // Verifica se o professor é o dono do mapa antes de permitir a devolução
+                if (nomeUs.equals(this.controle.getMapaTematico(nome).getDono().getNome())) {
+                    this.controle.devolverMapaTematico(nome, this.controle.getUsuario(nomeUs));
+                }
+                break;
+            case 9:
+                // Solicita o título do periódico que o professor deseja devolver
+                System.out.print("Digite o título do periódico: ");
+                String name = scanner.nextLine();
+
+                // Solicita o nome do professor
+                System.out.print("Qual seu nome: ");
+                String nomeUr = scanner.nextLine();
+                
+                // Verifica se o professor é o dono do periódico antes de permitir a devolução
+                if (nomeUr.equals(this.controle.getLivro(name).getDono().getNome())) {
+                    this.controle.devolverLivro(name, this.controle.getUsuario(nomeUr));
+                }
+                break;
+            default:
+                // Caso a opção escolhida não seja válida
+                System.out.println("Opção inválida.");
+        }
+    }
+}
+
+
+
+		

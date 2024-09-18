@@ -1,0 +1,111 @@
+
+public class Usuario {
+   
+    private String nome; // Nome do usuário
+   
+    protected int nivelDePrivilegio; // Nível de privilégio do usuário (1 por padrão)
+    
+    protected ArrayList<Item> itensRetirados;// Lista de itens retirados pelo usuário
+
+    // Construtor que inicializa o nome e os itens retirados
+    public Usuario(String nome) {
+        this.nome = nome;
+        this.nivelDePrivilegio = 1; // Nível de privilégio padrão
+        this.itensRetirados = new ArrayList<Item>(); // Inicializa a lista de itens retirados
+    }
+
+    // Método para obter o nome do usuário
+    public String getNome() {
+        return nome;
+    }
+
+    // Método para retirar um item
+    public boolean retiraItem(Item it) {
+
+        // Verifica se o item está disponível para empréstimo
+        if (it.isDisponivel()) {
+
+            // Empresta o item ao usuário e adiciona à lista de itens retirados
+            it.empresta(this, getPrazoMaximo());
+            this.itensRetirados.add(it);
+
+            return true; // Retorno verdadeiro se o item foi retirado com sucesso
+        }
+        return false; // Retorno falso se o item não estava disponível
+    }
+
+    // Método para devolver um item
+    public boolean devolveItem(Item it) {
+
+        // Remove o item da lista de itens retirados e chama o método de retorno do item
+        this.itensRetirados.remove(it);
+        it.retorna(this);
+
+        return true; // Retorno verdadeiro após a devolução
+    }
+
+    // Método que retorna a cota máxima de itens que o usuário pode retirar
+    public int getCotaMaxima() {
+        return 2; // Cota padrão de 2 itens
+    }
+
+    // Método que retorna o prazo máximo para a devolução de itens
+    public int getPrazoMaximo() {
+        return 4; // Prazo padrão de 4 dias
+    }
+
+    // Método que verifica se o usuário tem itens a devolver
+    public boolean isADevolver() {
+
+        // Verifica se a cota máxima foi atingida ou se tem prazo vencido
+        return ((this.itensRetirados.size() >= this.getCotaMaxima() || this.temPrazoVencido()) ? true : false);
+    }
+
+    // Método que verifica se o usuário está apto a retirar mais itens
+    public boolean isAptoARetirar() {
+        return (!this.isADevolver()); // Retorna verdadeiro se não há itens a devolver
+    }
+
+    // Método que verifica se algum item retirado está com o prazo vencido
+    public boolean temPrazoVencido() {
+        for (Item item : this.itensRetirados) {
+            if (item.isEmAtraso()) {
+                return true; // Retorna verdadeiro se algum item estiver em atraso
+            }
+        }
+        return false; // Retorna falso se nenhum item estiver em atraso
+    }
+
+    // Método que verifica se o usuário é um professor (padrão para falso)
+    public boolean isProfessor() {
+        return false; // Esta classe representa um usuário comum
+    }
+
+    // Método que retorna uma representação em string do usuário
+    public String toString() {
+        return "Usuario " + nome; // Retorna o nome do usuário
+    }
+
+    // Método que lista a carga atual do usuário
+    public String listaCarga() {
+        StringBuilder carga = new StringBuilder();
+        carga.append(this.toString()).append(" Limite: ").append(this.getCotaMaxima()).append(" Carga atual: ")
+                .append(this.itensRetirados.size());
+
+        // Adiciona informações sobre os itens retirados
+        for (Item item : this.itensRetirados) {
+            carga.append(item.toString()).append("\n");
+        }
+        return carga.toString(); // Retorna a carga formatada
+    }
+
+    // Método que retorna o nível de privilégio do usuário
+    public int getNivelPriv() {
+        return this.nivelDePrivilegio; // Retorna o nível de privilégio
+    }
+
+    // Método que retorna a lista de itens retirados
+    public ArrayList<Item> getItens() {
+        return this.itensRetirados; // Retorna a lista de itens
+    }
+}

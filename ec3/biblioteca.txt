@@ -1,0 +1,157 @@
+
+import java.util.ArrayList; // Importa a classe ArrayList para usar listas dinâmicas
+
+
+// Classe Biblioteca que gerencia livros, usuários e mapas temáticos
+public class Biblioteca {
+
+    // Listas que armazenam os livros, usuários e mapas temáticos
+    private ArrayList<Livro> livros;
+    private ArrayList<Usuario> usuarios;
+    private ArrayList<MapaTematico> mapasTematicos;
+
+    // Construtor da classe Biblioteca
+    public Biblioteca() {
+        // Inicializa as listas
+        livros = new ArrayList<Livro>();
+        usuarios = new ArrayList<Usuario>();
+        mapasTematicos = new ArrayList<MapaTematico>();
+    }
+
+
+    // Método para adicionar um livro à biblioteca
+    public void adicionarLivro(Livro livro) {
+        livros.add(livro); // Adiciona o livro à lista de livros
+    }
+
+
+    // Método para remover um livro da biblioteca
+    public void removerLivro(Livro livro) {
+        livros.remove(livro); // Remove o livro da lista de livros
+    }
+
+
+    // Método para adicionar um usuário à biblioteca
+    public void adicionarUsuario(Usuario usuario) {
+        usuarios.add(usuario); // Adiciona o usuário à lista de usuários
+    }
+
+
+    // Método para remover um usuário da biblioteca
+    public void removerUsuario(Usuario usuario) {
+        usuarios.remove(usuario); // Remove o usuário da lista de usuários
+    }
+
+
+    // Método para adicionar um mapa temático à biblioteca
+    public void adicionarMapaTematico(MapaTematico mapa) {
+        mapasTematicos.add(mapa); // Adiciona o mapa à lista de mapas temáticos
+    }
+
+
+    // Método para remover um mapa temático da biblioteca
+    public void removerMapaTematico(MapaTematico mapa) {
+        mapasTematicos.remove(mapa); // Remove o mapa da lista de mapas temáticos
+    }
+
+
+    // Método para emprestar um livro a um usuário
+    public boolean emprestaLivro(String titulo, Usuario usuario) {
+        // Percorre a lista de livros para encontrar o título
+        for (Livro livro : livros) {
+            if (livro.getTitulo().equals(titulo)) {
+                return livro.empresta(usuario, 0); // Tenta emprestar o livro ao usuário
+            }
+        }
+        return false; // Retorna falso se o livro não foi encontrado
+    }
+
+
+    // Método para devolver um livro de um usuário
+    public boolean devolveLivro(String titulo, Usuario usuario) {
+        // Percorre a lista de livros para encontrar o título
+        for (Livro livro : livros) {
+            if (livro.getTitulo().equals(titulo)) {
+                return livro.retorna(usuario); // Tenta retornar o livro ao usuário
+            }
+        }
+        return false; // Retorna falso se o livro não foi encontrado
+    }
+
+
+    // Método para emprestar um mapa temático a um usuário
+    public boolean emprestaMapaTematico(String titulo, Usuario usuario) {
+        // Percorre a lista de mapas para encontrar o título
+        for (MapaTematico mapa : mapasTematicos) {
+            if (mapa.getTitulo().equals(titulo)) {
+                return mapa.empresta(usuario, 0); // Tenta emprestar o mapa ao usuário
+            }
+        }
+        return false; // Retorna falso se o mapa não foi encontrado
+    }
+
+
+    // Método para devolver um mapa temático de um usuário
+    public boolean devolveMapaTematico(String titulo, Usuario usuario) {
+        // Percorre a lista de mapas para encontrar o título
+        for (MapaTematico mapa : mapasTematicos) {
+            if (mapa.getTitulo().equals(titulo)) {
+                return mapa.retorna(usuario); // Tenta retornar o mapa ao usuário
+            }
+        }
+        return false; // Retorna falso se o mapa não foi encontrado
+    }
+
+
+    // Método para obter um usuário pelo nome
+    public Usuario getUsuario(String nome) {
+        // Percorre a lista de usuários para encontrar o nome
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNome().equals(nome)) {
+                return usuario; // Retorna o usuário encontrado
+            }
+        }
+        return null; // Retorna null se o usuário não foi encontrado
+    }
+
+
+    // Método para obter um livro pelo título
+    public Livro getLivro(String titulo) {
+        // Percorre a lista de livros para encontrar o título
+        for (Livro livro : livros) {
+            if (livro.getTitulo().equals(titulo)) {
+                return livro; // Retorna o livro encontrado
+            }
+        }
+        return null; // Retorna null se o livro não foi encontrado
+    }
+
+    // Método para obter um mapa temático pelo título
+    public MapaTematico getMapaTematico(String titulo) {
+        // Percorre a lista de mapas para encontrar o título
+        for (MapaTematico mapa : mapasTematicos) {
+            if (mapa.getTitulo().equals(titulo)) {
+                return mapa; // Retorna o mapa encontrado
+            }
+        }
+        return null; // Retorna null se o mapa não foi encontrado
+    }
+
+
+    // Método para mostrar o status de um livro ou mapa temático
+    public void mostrarStatus(String titulo) {
+        Livro livro = getLivro(titulo); // Tenta obter o livro pelo título
+        if (livro != null) {
+            System.out.println(livro); // Exibe informações do livro se encontrado
+            return; // Sai do método
+        }
+
+        MapaTematico mapa = getMapaTematico(titulo); // Tenta obter o mapa pelo título
+        if (mapa != null) {
+            System.out.println(mapa); // Exibe informações do mapa se encontrado
+            return; // Sai do método
+        }
+
+        System.out.println("Item nao encontrado"); // Mensagem se o item não foi encontrado
+    }
+}

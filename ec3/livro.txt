@@ -1,0 +1,100 @@
+import java.util.Calendar; // Importa a classe Calendar
+import java.util.GregorianCalendar; // Importa a classe GregorianCalendar
+import java.util.Date; // Importa a classe Date
+
+// Classe Livro que estende a classe Item
+public class Livro extends Item {
+
+    private Professor bloqueadoPor; // Professor que bloqueou o livro
+    private Date dtBloqueio; // Data em que o livro foi bloqueado
+    private Date dtDesbloqueio; // Data em que o livro será desbloqueado
+    private boolean isPeriodico; // Indica se o livro é um periódico
+
+
+    // Construtor da classe Livro que inicializa o título
+    public Livro(String tit) {
+        super(tit); // Chama o construtor da classe pai (Item)
+        this.titulo = tit; // Define o título do livro
+    }
+
+    // Método para definir o livro como periódico
+    public void setPer() {
+        this.isPeriodico = true; // Marca o livro como periódico
+    }
+
+    // Método para verificar se o livro é um periódico
+    public boolean getPer() {
+        return isPeriodico; // Retorna o status do periódico
+    }
+
+    // Método para obter o professor que bloqueou o livro
+    public Professor getBloqueador() {
+        return this.bloqueadoPor; // Retorna o professor que bloqueou
+    }
+
+    // Método para verificar se o livro está disponível para empréstimo
+    public boolean isDisponivel() {
+        Date hoje = new Date(); // Obtém a data atual
+
+        // Retorna verdadeiro se o livro não está retirado e não está bloqueado ou já foi desbloqueado
+        return this.retiradoPor == null && (this.bloqueadoPor == null || this.dtDesbloqueio.before(hoje));
+    }
+
+    // Método para verificar se o livro está bloqueado
+    public boolean isBloqueado() {
+        Date hoje = new Date(); // Obtém a data atual
+
+        // Retorna verdadeiro se o livro não está retirado e está bloqueado
+        return this.retiradoPor == null && !(this.bloqueadoPor == null) && !(this.dtDesbloqueio.before(hoje));
+    }
+
+    // Método para bloquear o livro
+    public boolean bloqueia(Professor u, int prazo) {
+        GregorianCalendar cal = new GregorianCalendar(); // Cria um calendário
+
+        // Verifica se o livro está disponível e se o usuário é um professor
+        if (this.isDisponivel() && u.isProfessor()) {
+            this.bloqueadoPor = u; // Define o professor que bloqueou
+            this.dtBloqueio = cal.getTime(); // Define a data de bloqueio
+            cal.add(Calendar.DATE, (prazo > 20 ? 20 : prazo)); // Define a data de desbloqueio com limite de 20 dias
+            this.dtDesbloqueio = cal.getTime(); // Define a data de desbloqueio
+
+            return true; // Retorno positivo para o bloqueio
+        }
+        return false; // Retorno negativo se não puder bloquear
+    }
+
+    // Método para desbloquear o livro
+    public boolean desbloqueia(Professor u) {
+
+        // Verifica se o professor que está tentando desbloquear é o mesmo que bloqueou
+        if (u == this.bloqueadoPor) {
+            this.bloqueadoPor = null; // Libera o bloqueio do livro
+            return true; // Retorno positivo para o desbloqueio
+        }
+        return false; // Retorno negativo se o professor não é o bloqueador
+    }
+
+    // Método para representar o livro como uma string
+    public String toString() {
+
+        // Se o livro está disponível
+        if (this.isDisponivel()) {
+            if (this.isPeriodico) { // Se é um periódico
+                return this.titulo + " (Acesso apenas para professores)"; // Retorna título e restrição
+            } else {
+                return this.titulo + " (disponivel)"; // Retorna título e status
+            }
+        }
+
+        // Se o livro está emprestado
+        if (this.isEmprestado()) {
+            this.state = this.titulo + " retirado por " + this.retiradoPor + " em " + dma(this.dtEmprestimo) + " ate "
+                    + dma(this.dtDevolucao);
+        } else { // Se o livro está bloqueado
+            this.state = this.titulo + " bloqueado por " + this.bloqueadoPor + " em " + dma(this.dtBloqueio) + " ate "
+                    + dma(this.dtDesbloqueio);
+        }
+        return super.state; // Retorna o estado do livro
+    }
+}

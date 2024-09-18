@@ -1,0 +1,9 @@
+// Classe principal que contém o método main para executar o programa
+public class Main {
+
+    // Método principal que inicia a execução do programa
+    public static void main(String[] args) {
+        Terminal s = new Terminal(); // Cria uma nova instância do Terminal
+        s.menu(); // Chama o método menu do Terminal para exibir as opções ao usuário
+    }
+}

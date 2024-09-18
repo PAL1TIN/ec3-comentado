@@ -1,0 +1,19 @@
+// Classe Periodico que estende a classe Livro
+public class Periodico extends Livro {
+    
+    // Construtor da classe Periodico que inicializa o título
+    public Periodico(String tit) {
+        super(tit); // Chama o construtor da classe pai (Livro)
+    }
+
+    // Método para emprestar o periódico a um usuário
+    public boolean empresta(Usuario u, int prazo) {
+
+        // Verifica se o usuário é um professor
+        if (u.isProfessor()) {
+            return super.empresta(u, 7); // Se for professor, permite o empréstimo por 7 dias
+        } else {
+            return false; // Se não for professor, não permite o empréstimo
+        }
+    }
+}

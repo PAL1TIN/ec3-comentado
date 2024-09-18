@@ -1,0 +1,30 @@
+import java.util.Calendar; // Importa a classe Calendar
+import java.util.GregorianCalendar; // Importa a classe GregorianCalendar
+
+// Classe MapaTematico que estende a classe Item
+public class MapaTematico extends Item {
+
+    private int nivPriv; // Nível de privilégio necessário para emprestar o mapa temático
+
+    // Construtor da classe MapaTematico que inicializa o nome e o nível de privilégio
+    public MapaTematico(String nome, int nP) {
+        super(nome); // Chama o construtor da classe pai (Item)
+        this.nivPriv = nP; // Define o nível de privilégio
+    }
+
+    // Método para emprestar o mapa temático a um usuário
+    public boolean empresta(Usuario u, int prazo) {
+        GregorianCalendar cal = new GregorianCalendar(); // Cria um calendário
+
+        // Verifica se o mapa está disponível e se o usuário tem o nível de privilégio necessário
+        if ((this.isDisponivel()) && (u.getNivelPriv() >= this.nivPriv)) {
+            this.retiradoPor = u; // Define o usuário que retirou o mapa
+            this.dtEmprestimo = cal.getTime(); // Registra a data de empréstimo
+            cal.add(Calendar.DATE, 2); // Define a data de devolução para 2 dias após o empréstimo
+            this.dtDevolucao = cal.getTime(); // Registra a data de devolução
+
+            return true; // Retorno positivo para o empréstimo
+        }
+        return false; // Retorno negativo se não puder emprestar
+    }
+}

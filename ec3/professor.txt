@@ -1,0 +1,58 @@
+// Classe Professor que estende a classe Usuario
+public class Professor extends Usuario {
+
+    // Construtor da classe Professor que inicializa o nome
+    public Professor(String nome) {
+        super(nome); // Chama o construtor da classe pai (Usuario)
+        this.nivelDePrivilegio = 3; // Define o nível de privilégio para professores
+    }
+
+    // Método para retirar um item (livro ou mapa temático)
+    public boolean retiraItem(Item it) {
+
+        // Verifica se o item está disponível
+        if (it.isDisponivel()) {
+            it.empresta(this, getPrazoMaximo()); // Empresta o item ao professor
+            this.itensRetirados.add(it); // Adiciona o item à lista de itens retirados
+
+            return true; // Retorno positivo para a retirada
+        }
+        return false; // Retorno negativo se o item não estiver disponível
+    }
+
+    // Método para devolver um item
+    public boolean devolveItem(Item it) {
+        this.itensRetirados.remove(it); // Remove o item da lista de itens retirados
+        return true; // Retorno positivo para a devolução
+    }
+
+    // Método para bloquear um livro
+    public boolean bloqueiaLivro(Livro livro, int prazo) {
+        return livro.bloqueia(this, prazo); // Chama o método de bloqueio do livro
+    }
+
+    // Método para desbloquear um livro
+    public boolean desbloqueiaLivro(Livro livro) {
+        return livro.desbloqueia(this); // Chama o método de desbloqueio do livro
+    }
+
+    // Método que retorna a cota máxima de itens que um professor pode retirar
+    public int getCotaMaxima() {
+        return 5; // Define a cota máxima como 5
+    }
+
+    // Método que retorna o prazo máximo de empréstimo
+    public int getPrazoMaximo() {
+        return 14; // Define o prazo máximo como 14 dias
+    }
+
+    // Método que retorna uma representação em String do objeto
+    public String toString() {
+        return "Prof. " + super.getNome(); // Formata a string com o nome do professor
+    }
+
+    // Método que verifica se o usuário é um professor
+    public boolean isProfessor() {
+        return true; // Retorna verdadeiro para indicar que é um professor
+    }
+}

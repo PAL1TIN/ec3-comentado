@@ -1,0 +1,58 @@
+// Classe Aluno que herda da classe Usuario
+public class Aluno extends Usuario {
+   
+    private Date dataLimite;  // Atributo que armazena a data limite do cartão
+
+
+    // Construtor da classe Aluno
+    public Aluno(String nome, Date dt) {
+        super(nome); // Chama o construtor da superclasse Usuario para definir o nome
+    
+        this.dataLimite = dt; // Define a data limite com o valor fornecido
+    }
+
+
+    // Método para renovar o cartão com uma nova data limite
+    public void renovaCartao(Date dt) {
+        this.dataLimite = dt; // Atualiza a data limite
+    }
+
+
+    // Método que verifica se o aluno está regular
+    public boolean isRegular() {
+        Date hoje = new Date(); // Obtém a data atual
+        return dataLimite.after(hoje); // Retorna verdadeiro se a data limite é após a data de hoje
+    }
+
+
+    // Método que verifica se o aluno precisa renovar o cartão
+    public boolean isARenovar() {
+        return !isRegular(); // Retorna verdadeiro se o aluno não é regular
+    }
+
+
+    // Método que retorna uma representação em string do objeto Aluno
+    public String toString() {
+        return "Aluno:" + this.getNome(); // Exibe nome do aluno
+    }
+
+
+    // Método que retorna a cota máxima de empréstimos
+    public int getCotaMaxima() {
+        if (isRegular()) {
+            return 3; // Se regular, a cota máxima é 3
+        }
+       
+        return super.getCotaMaxima(); // Se não regular, chama o método da superclasse para obter a cota padrão
+    }
+
+
+    // Método que retorna o prazo máximo para devolução
+    public int getPrazoMaximo() {
+        if (isRegular()) {
+            return 7; // Se regular, o prazo máximo é 7 dias
+        }
+        // Se não regular, chama o método da superclasse para obter o prazo padrão
+        return super.getPrazoMaximo();
+    }
+}

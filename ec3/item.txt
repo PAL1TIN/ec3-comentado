@@ -1,0 +1,97 @@
+import java.util.Calendar; // Importa a classe Calendar
+import java.util.Date; // Importa a classe Date
+import java.util.GregorianCalendar; // Importa a classe GregorianCalendar
+
+// Classe abstrata Item que representa um item que pode ser emprestado
+public abstract class Item {
+    protected Usuario retiradoPor; // Usuário que retirou o item
+    protected Date dtEmprestimo; // Data de empréstimo do item
+    protected Date dtDevolucao; // Data de devolução do item
+    protected String titulo; // Título do item
+    protected String state; // Estado atual do item (disponível ou retirado)
+
+    // Construtor da classe Item que inicializa o título
+    public Item(String nome) {
+        this.titulo = nome; // Define o título do item
+    }
+
+    // Método para obter o título do item
+    public String getTitulo() {
+        return this.titulo; // Retorna o título
+    }
+
+    // Método para obter o usuário que retirou o item
+    public Usuario getDono() {
+        return this.retiradoPor; // Retorna o usuário que retirou
+    }
+
+    // Método para emprestar o item a um usuário
+    public boolean empresta(Usuario u, int prazo) {
+
+        GregorianCalendar cal = new GregorianCalendar(); // Cria um calendário
+
+        if (this.isDisponivel()) { // Verifica se o item está disponível
+
+            this.retiradoPor = u; // Define o usuário que retirou
+
+            this.dtEmprestimo = cal.getTime(); // Define a data de empréstimo
+
+            cal.add(Calendar.DATE, prazo); // Adiciona o prazo à data atual
+
+            this.dtDevolucao = cal.getTime(); // Define a data de devolução
+
+            return true; // Retorno positivo para o empréstimo
+        }
+        return false; // Retorno negativo se não puder emprestar
+    }
+
+    // Método para retornar o item ao usuário
+    public boolean retorna(Usuario u) {
+        if (u == this.retiradoPor) { // Verifica se o usuário é o mesmo que retirou
+            this.retiradoPor = null; // Libera o item
+            return true; // Retorno positivo para a devolução
+        }
+        return false; // Retorno negativo se o usuário não é o dono
+    }
+
+    // Método para verificar se o item está disponível
+    public boolean isDisponivel() {
+        return this.retiradoPor == null; // Retorna verdadeiro se não houver usuário associado
+    }
+
+    // Método para verificar se o item está emprestado
+    public boolean isEmprestado() {
+        return !(this.retiradoPor == null); // Retorna verdadeiro se há um usuário associado
+    }
+
+    // Método para verificar se o item está atrasado
+    public boolean isEmAtraso() {
+        Date hoje = new Date(); // Obtém a data atual
+
+        // Verifica se a data de devolução é anterior à data atual e se o item foi retirado
+        if ((this.dtDevolucao.before(hoje) && (this.retiradoPor != null))) {
+            return true; // Retorno positivo se estiver atrasado
+        }
+        return false; // Retorno negativo se não estiver atrasado
+    }
+
+    // Método para representar o item como uma string
+    public String toString() {
+        if (this.isDisponivel()) { // Se o item está disponível
+            return this.titulo + " (disponivel)"; // Retorna título e status
+        }
+
+        // Retorna informações sobre quem retirou o item, data de empréstimo e data de devolução
+        state = this.titulo + " (retirado por " + this.retiradoPor + " em " + dma(this.dtEmprestimo) + " ate "
+                + dma(this.dtDevolucao) + ")";
+        return state; // Retorna o estado do item
+    }
+
+    // Método protegido para formatar a data no formato dia/mês/ano
+    protected String dma(Date dt) {
+        GregorianCalendar cal = new GregorianCalendar(); // Cria um calendário
+        cal.setTime(dt); // Define a data
+        // Retorna a data formatada
+        return cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
+    }
+}
